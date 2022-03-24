@@ -31,6 +31,7 @@ async function handleRequest(event) {
     let wmod = await emscripten_module
     
     let query = "SELECT count(*) FROM forex";
+    
     if(request.method == "POST") {
         query = await request.text()
     }
@@ -49,42 +50,41 @@ async function handleRequest(event) {
       String(request.headers.get("User-Agent"))
     )
     
-    function csvJSON(csv){
-      const lines = csv.split("\n");
+//     function csvJSON(csv){
+//       const lines = csv.split("\n");
 
-      const resultJson = [];
+//       const resultJson = [];
 
-      // NOTE: If your columns contain commas in their values, you'll need
-      // to deal with those before doing the next step 
-      // (you might convert them to &&& or something, then covert them back later)
-      // jsfiddle showing the issue https://jsfiddle.net/
-      const headers = lines[0].split(",");
+//       // NOTE: If your columns contain commas in their values, you'll need
+//       // to deal with those before doing the next step 
+//       // (you might convert them to &&& or something, then covert them back later)
+//       // jsfiddle showing the issue https://jsfiddle.net/
+//       const headers = lines[0].split(",");
 
-      for (var i = 1; i < lines.length; i++){
-          const obj = {};
-          const currentline = lines[i].split(",");
+//       for (var i = 1; i < lines.length; i++){
+//           const obj = {};
+//           const currentline = lines[i].split(",");
 
-          for(var j = 0; j < headers.length; j++){
-              obj[headers[j]] = currentline[j];
-          }
+//           for(var j = 0; j < headers.length; j++){
+//               obj[headers[j]] = currentline[j];
+//           }
 
-          resultJson.push(obj);
-      }
+//           resultJson.push(obj);
+//       }
 
-      //return result; //JavaScript object
-      return JSON.stringify(resultJson); //JSON
-    }
+//       //return result; //JavaScript object
+//       return JSON.stringify(resultJson); //JSON
+//     }
     
-    const json = csvJSON(result);
+//     const json = csvJSON(result);
     
-    console.log(json, result);
+    console.log(result);
 
-    let newResponse = new Response(json, {
+    let newResponse = new Response(result, {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-        'content-type': 'application/json'
+        'Access-Control-Allow-Headers': '*'
        }
     });
     
