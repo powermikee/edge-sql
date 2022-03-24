@@ -49,29 +49,36 @@ async function handleRequest(event) {
       String(request.headers.get("User-Agent"))
     )
     
-    function csvToJson(text, headers, quoteChar = '"', delimiter = ',') {
-      const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs');
+    function csvJSON(csv){
 
-      const match = line => {
-        const matches = [...line.matchAll(regex)].map(m => m[2]);
-        matches.pop(); // cut off blank match at the end
-        return matches;
+      var lines=csv.split("\n");
+
+      var result = [];
+
+      // NOTE: If your columns contain commas in their values, you'll need
+      // to deal with those before doing the next step 
+      // (you might convert them to &&& or something, then covert them back later)
+      // jsfiddle showing the issue https://jsfiddle.net/
+      var headers=lines[0].split(",");
+
+      for(var i=1;i<lines.length;i++){
+
+          var obj = {};
+          var currentline=lines[i].split(",");
+
+          for(var j=0;j<headers.length;j++){
+              obj[headers[j]] = currentline[j];
+          }
+
+          result.push(obj);
+
       }
 
-      const lines = text.split('\n');
-      const heads = !headers ? match(lines.shift()) : headers;
-
-      return lines.map(line => {
-        return match(line).reduce((acc, cur, i) => {
-          // Attempt to parse as a number; replace blank matches with `null`
-          const val = cur.length <= 0 ? null : Number(cur) || cur;
-          const key = !heads[i] ? `extra_${i}`: heads[i];
-          return { ...acc, [key]: val };
-        }, {});
-      });
+      //return result; //JavaScript object
+      return JSON.stringify(result); //JSON
     }
     
-    const json = csvToJson(result);
+    const json = csvJSON(result);
 
     let newResponse = new Response(json, {
       status: 200,
