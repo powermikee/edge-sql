@@ -26,7 +26,7 @@ async function handleRequest(event) {
 
   if (url.pathname == '/query') {
 
-    let data = await SQLCSV.get('forex.csv', { cacheTtl: 60 })
+    let data = await SQLCSV.get('forex.csv');
 
     let wmod = await emscripten_module
     
