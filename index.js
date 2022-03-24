@@ -59,13 +59,13 @@ async function handleRequest(event) {
       }
 
       const lines = text.split('\n');
-      const heads = headers ?? match(lines.shift());
+      const heads = !headers ? match(lines.shift()) : headers;
 
       return lines.map(line => {
         return match(line).reduce((acc, cur, i) => {
           // Attempt to parse as a number; replace blank matches with `null`
           const val = cur.length <= 0 ? null : Number(cur) || cur;
-          const key = heads[i] ?? `extra_${i}`;
+          const key = !heads[i] ? `extra_${i}`: heads[i];
           return { ...acc, [key]: val };
         }, {});
       });
