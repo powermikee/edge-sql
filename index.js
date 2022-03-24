@@ -26,7 +26,7 @@ async function handleRequest(event) {
 
   if (url.pathname == '/query') {
 
-    let data = await SQLCSV.get('forex.csv', { cacheTtl: (60 * 60 * 24 * 30) })
+    let data = await SQLCSV.get('forex.csv', { cacheTtl: 60 })
 
     let wmod = await emscripten_module
     
@@ -84,8 +84,8 @@ async function handleRequest(event) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
-        'content-type': 'application/json',
-        }
+        'content-type': 'application/json'
+       }
     });
     
     return newResponse
