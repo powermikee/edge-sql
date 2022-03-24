@@ -22,8 +22,7 @@ let emscripten_module = new Promise((resolve, reject) => {
 
 async function handleRequest(event) {
   let request = event.request;
-  const { url } = request;
-  const { origin } = new URL(url);
+  let url = new URL(request.url);
 
   if (url.pathname == '/query') {
 
@@ -89,7 +88,7 @@ async function handleRequest(event) {
       var date1 = new Date();
 
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", '${origin}/query', true);
+        xhr.open("POST", '${url.origin}/query', true);
         xhr.setRequestHeader("Content-Type", "application/text");
 
         xhr.onreadystatechange = function() {
