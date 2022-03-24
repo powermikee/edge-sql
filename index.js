@@ -35,7 +35,7 @@ async function handleRequest(event) {
     const query = await request.text();
 
     let result = wmod.query(
-      "CREATE VIRTUAL TABLE temp.forex USING csv(data='"+data+"',header);"+query,
+      "CREATE TABLE forex USING csv(data='"+data+"',header);"+query,
       String(request.cf.country),
       String(request.cf.asn),
       String(request.cf.colo),
