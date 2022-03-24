@@ -28,7 +28,7 @@ async function handleRequest(event) {
   if (url.pathname == '/query') {
     try {
 
-    let data = await SQLCSV.get('forex.csv')
+    let data = await SQLITE.get('forex.csv')
 
     let wmod = await emscripten_module
     
