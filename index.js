@@ -32,7 +32,6 @@ async function handleRequest(event) {
 
     let wmod = await emscripten_module
     
-    let query = "SELECT count(*) FROM forex";
     if(request.method == "POST") {
         query = await request.text()
     }
