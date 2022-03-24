@@ -1,4 +1,4 @@
-name = "sql"
+name = "workers-sql"
 type = "webpack"
 account_id = ""
 workers_dev = true
