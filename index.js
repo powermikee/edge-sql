@@ -22,7 +22,7 @@ let emscripten_module = new Promise((resolve, reject) => {
 
 async function handleRequest(event) {
 
-  let request = event.request
+  let request = event.request;
 
   let url = new URL(request.url);
   if (url.pathname == '/query') {
