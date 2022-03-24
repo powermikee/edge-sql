@@ -1,5 +1,5 @@
 // import the emscripten glue code
-import emscripten from './build/module.js'
+import emscripten from './build/module.js';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event))
