@@ -48,13 +48,40 @@ async function handleRequest(event) {
       String(request.headers.get("CF-Connecting-IP")),
       String(request.headers.get("User-Agent"))
     )
+    
+    function csvToJson(text, headers, quoteChar = '"', delimiter = ',') {
+      const regex = new RegExp(`\\s*(${quoteChar})?(.*?)\\1\\s*(?:${delimiter}|$)`, 'gs');
 
-    let newResponse = new Response(result, {status: 200,
+      const match = line => {
+        const matches = [...line.matchAll(regex)].map(m => m[2]);
+        matches.pop(); // cut off blank match at the end
+        return matches;
+      }
+
+      const lines = text.split('\n');
+      const heads = headers ?? match(lines.shift());
+
+      return lines.map(line => {
+        return match(line).reduce((acc, cur, i) => {
+          // Attempt to parse as a number; replace blank matches with `null`
+          const val = cur.length <= 0 ? null : Number(cur) || cur;
+          const key = heads[i] ?? `extra_${i}`;
+          return { ...acc, [key]: val };
+        }, {});
+      });
+    }
+    
+    const json = csvToJson(result);
+
+    let newResponse = new Response(json, {
+      status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*'
+        'Access-Control-Allow-Headers': '*',
+        'content-type': 'application/json',
         }
-      })
+    });
+    
     return newResponse
   } else if (url.pathname == '/') {
     let page = `<!doctype html>
