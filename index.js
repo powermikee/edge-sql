@@ -1,5 +1,5 @@
 // import the emscripten glue code
-import emscripten from './build/module.js';
+import emscripten from './build/module.js'
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event))
@@ -21,17 +21,16 @@ let emscripten_module = new Promise((resolve, reject) => {
 })
 
 async function handleRequest(event) {
-  let request = event.request;
-  let url = new URL(request.url);
+  let request = event.request
 
+  let url = new URL(request.url);
   if (url.pathname == '/query') {
 
-    let data = await SQLCSV.get('forex.csv');
+    let data = await SQLCSV.get('forex.csv')
 
     let wmod = await emscripten_module
     
     let query = "SELECT count(*) FROM forex";
-    
     if(request.method == "POST") {
         query = await request.text()
     }
@@ -49,45 +48,13 @@ async function handleRequest(event) {
       String(request.headers.get("CF-Connecting-IP")),
       String(request.headers.get("User-Agent"))
     )
-    
-//     function csvJSON(csv){
-//       const lines = csv.split("\n");
 
-//       const resultJson = [];
-
-//       // NOTE: If your columns contain commas in their values, you'll need
-//       // to deal with those before doing the next step 
-//       // (you might convert them to &&& or something, then covert them back later)
-//       // jsfiddle showing the issue https://jsfiddle.net/
-//       const headers = lines[0].split(",");
-
-//       for (var i = 1; i < lines.length; i++){
-//           const obj = {};
-//           const currentline = lines[i].split(",");
-
-//           for(var j = 0; j < headers.length; j++){
-//               obj[headers[j]] = currentline[j];
-//           }
-
-//           resultJson.push(obj);
-//       }
-
-//       //return result; //JavaScript object
-//       return JSON.stringify(resultJson); //JSON
-//     }
-    
-//     const json = csvJSON(result);
-    
-    console.log(result);
-
-    let newResponse = new Response(result, {
-      status: 200,
+    let newResponse = new Response(result, {status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*'
-       }
-    });
-    
+        }
+      })
     return newResponse
   } else if (url.pathname == '/') {
     let page = `<!doctype html>
