@@ -32,7 +32,7 @@ async function handleRequest(event) {
 
     let wmod = await emscripten_module
     
-    const query = await request.text()
+    const query = await request.text();
 
     let result = wmod.query(
       "CREATE VIRTUAL TABLE temp.forex USING csv(data='"+data+"',header);"+query,
