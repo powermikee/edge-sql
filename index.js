@@ -21,10 +21,12 @@ let emscripten_module = new Promise((resolve, reject) => {
 })
 
 async function handleRequest(event) {
+
   let request = event.request
 
   let url = new URL(request.url);
   if (url.pathname == '/query') {
+    try {
 
     let data = await SQLCSV.get('forex.csv')
 
@@ -56,6 +58,10 @@ async function handleRequest(event) {
         }
       })
     return newResponse
+    } catch (error) {
+      console.log(error);
+      return new Response(error.message);
+    }
   } else if (url.pathname == '/') {
     let page = `<!doctype html>
 
@@ -151,4 +157,5 @@ WHERE
   } else {
     return new Response("not found", {status: 404})
   }
+  
 }
